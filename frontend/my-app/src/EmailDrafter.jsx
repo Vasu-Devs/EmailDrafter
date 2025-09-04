@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "./api";
-
+import { Analytics } from "@vercel/analytics/next"
 export default function EmailDrafter() {
   const [note, setNote] = useState("");
   const [tone, setTone] = useState("formal");
