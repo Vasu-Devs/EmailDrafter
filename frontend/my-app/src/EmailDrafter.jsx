@@ -10,14 +10,14 @@ export default function EmailDrafter() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    setDraft("");
+    setDraft(""); // Clear previous draft
     const payload = { note, tone, recipient };
     try {
       const res = await api.post("/email-draft", payload, {
         headers: { "Content-Type": "application/json" },
       });
       if (res.data.reponse) {
-        setDraft(res.data.reponse);
+        setDraft(res.data.reponse); // Only update draft, not note
       } else {
         setDraft("❌ Error: " + JSON.stringify(res.data));
       }
