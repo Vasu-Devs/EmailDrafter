@@ -18,29 +18,29 @@ export default function EmailDrafter() {
 
   const handleSubmit = async () => {
     if (!note.trim()) return;
-    
+
     setLoading(true);
     setDraft("");
     const payload = { note: note.trim(), tone, recipient };
-    
+
     try {
       const res = await api.post("/email-draft", payload, {
         headers: { "Content-Type": "application/json" },
       });
-      
+
       if (res.data.reponse) {
         const newDraft = res.data.reponse;
         setDraft(newDraft);
-        
+
         const historyItem = {
           id: Date.now(),
           note: note.trim(),
           tone,
           recipient,
           draft: newDraft,
-          timestamp: new Date().toLocaleString()
+          timestamp: new Date().toLocaleString(),
         };
-        setHistory(prev => [historyItem, ...prev.slice(0, 4)]);
+        setHistory((prev) => [historyItem, ...prev.slice(0, 4)]);
       } else {
         setDraft("❌ Error: " + JSON.stringify(res.data));
       }
@@ -81,24 +81,36 @@ export default function EmailDrafter() {
 
   // Theme classes
   const themeClasses = {
-    bg: darkMode ? 'bg-black' : 'bg-white',
-    text: darkMode ? 'text-white' : 'text-black',
-    cardBg: darkMode ? 'bg-gray-900' : 'bg-gray-50',
-    cardBorder: darkMode ? 'border-gray-700' : 'border-gray-200',
-    inputBg: darkMode ? 'bg-gray-800' : 'bg-white',
-    inputBorder: darkMode ? 'border-gray-600' : 'border-gray-300',
-    inputText: darkMode ? 'text-white' : 'text-black',
-    buttonPrimary: darkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800',
-    buttonSecondary: darkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-black',
-    historyItem: darkMode ? 'bg-gray-800 hover:bg-gray-700 border-gray-600' : 'bg-white hover:bg-gray-50 border-gray-200',
-    textSecondary: darkMode ? 'text-gray-300' : 'text-gray-600',
-    textMuted: darkMode ? 'text-gray-400' : 'text-gray-500'
+    bg: darkMode ? "bg-black" : "bg-white",
+    text: darkMode ? "text-white" : "text-black",
+    cardBg: darkMode ? "bg-gray-900" : "bg-gray-50",
+    cardBorder: darkMode ? "border-gray-700" : "border-gray-200",
+    inputBg: darkMode ? "bg-gray-800" : "bg-white",
+    inputBorder: darkMode ? "border-gray-600" : "border-gray-300",
+    inputText: darkMode ? "text-white" : "text-black",
+    buttonPrimary: darkMode
+      ? "bg-white text-black hover:bg-gray-200"
+      : "bg-black text-white hover:bg-gray-800",
+    buttonSecondary: darkMode
+      ? "bg-gray-700 hover:bg-gray-600 text-white"
+      : "bg-gray-200 hover:bg-gray-300 text-black",
+    historyItem: darkMode
+      ? "bg-gray-800 hover:bg-gray-700 border-gray-600"
+      : "bg-white hover:bg-gray-50 border-gray-200",
+    textSecondary: darkMode ? "text-gray-300" : "text-gray-600",
+    textMuted: darkMode ? "text-gray-400" : "text-gray-500",
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${themeClasses.bg} ${themeClasses.text}`}>
+    <div
+      className={`min-h-screen transition-colors duration-300 ${themeClasses.bg} ${themeClasses.text}`}
+    >
       {/* Header */}
-      <div className={`${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'} border-b transition-colors duration-300`}>
+      <div
+        className={`${
+          darkMode ? "bg-gray-900 border-gray-700" : "bg-gray-100 border-gray-200"
+        } border-b transition-colors duration-300`}
+      >
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -113,20 +125,21 @@ export default function EmailDrafter() {
             <button
               onClick={toggleDarkMode}
               className={`p-3 rounded-full transition-all duration-300 ${themeClasses.buttonSecondary} shadow-md hover:shadow-lg`}
-              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
-              <span className="text-xl">
-                {darkMode ? '☀️' : '🌙'}
-              </span>
+              <span className="text-xl">{darkMode ? "☀️" : "🌙"}</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+      {/* Layout */}
+      <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Input Section */}
-        <div className="xl:col-span-1">
-          <div className={`${themeClasses.cardBg} rounded-xl p-8 border ${themeClasses.cardBorder} shadow-lg transition-all duration-300 hover:shadow-xl`}>
+        <div className="md:sticky md:top-6 self-start">
+          <div
+            className={`${themeClasses.cardBg} rounded-xl p-8 border ${themeClasses.cardBorder} shadow-lg transition-all duration-300 hover:shadow-xl`}
+          >
             <div className="flex items-center gap-3 mb-8">
               <span className="text-2xl">📝</span>
               <h2 className="text-xl font-bold">What's on your mind?</h2>
@@ -136,8 +149,10 @@ export default function EmailDrafter() {
               {/* Notes */}
               <div>
                 <label className="block text-sm font-semibold mb-3">
-                  Your messy thoughts 
-                  <span className={`ml-2 px-2 py-1 rounded-full text-xs ${themeClasses.buttonSecondary}`}>
+                  Your messy thoughts
+                  <span
+                    className={`ml-2 px-2 py-1 rounded-full text-xs ${themeClasses.buttonSecondary}`}
+                  >
                     {wordCount} words
                   </span>
                 </label>
@@ -173,9 +188,14 @@ export default function EmailDrafter() {
                   {[
                     { value: "formal", label: "Formal", icon: "👔" },
                     { value: "casual", label: "Casual", icon: "😎" },
-                    { value: "friendly", label: "Friendly", icon: "😊" }
+                    { value: "friendly", label: "Friendly", icon: "😊" },
                   ].map((option) => (
-                    <label key={option.value} className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 hover:${themeClasses.buttonSecondary} ${tone === option.value ? themeClasses.buttonSecondary : ''}`}>
+                    <label
+                      key={option.value}
+                      className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 hover:${themeClasses.buttonSecondary} ${
+                        tone === option.value ? themeClasses.buttonSecondary : ""
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="tone"
@@ -219,9 +239,12 @@ export default function EmailDrafter() {
           </div>
         </div>
 
-        {/* Output Section */}
-        <div className="xl:col-span-1">
-          <div className={`${themeClasses.cardBg} rounded-xl p-8 border ${themeClasses.cardBorder} shadow-lg transition-all duration-300 hover:shadow-xl min-h-[600px]`}>
+        {/* Right column: Output + History */}
+        <div className="space-y-8">
+          {/* Output Section */}
+          <div
+            className={`${themeClasses.cardBg} rounded-xl p-8 border ${themeClasses.cardBorder} shadow-lg transition-all duration-300 hover:shadow-xl min-h-[600px]`}
+          >
             {draft ? (
               <div className="h-full flex flex-col">
                 <div className="flex items-center justify-between mb-6">
@@ -231,7 +254,11 @@ export default function EmailDrafter() {
                   </div>
                   <button
                     onClick={handleCopy}
-                    className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg ${copied ? 'bg-green-500 text-white' : themeClasses.buttonPrimary}`}
+                    className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg ${
+                      copied
+                        ? "bg-green-500 text-white"
+                        : themeClasses.buttonPrimary
+                    }`}
                   >
                     {copied ? "✅ Copied!" : "📋 Copy"}
                   </button>
@@ -246,30 +273,37 @@ export default function EmailDrafter() {
               <div className="h-full flex flex-col items-center justify-center text-center space-y-6">
                 <div className="text-8xl opacity-50">✨</div>
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-bold">Generated email will appear here</h3>
-                  <p className={`${themeClasses.textSecondary} max-w-md text-lg leading-relaxed`}>
-                    Fill out the form and hit generate to see your polished email!
+                  <h3 className="text-2xl font-bold">
+                    Generated email will appear here
+                  </h3>
+                  <p
+                    className={`${themeClasses.textSecondary} max-w-md text-lg leading-relaxed`}
+                  >
+                    Fill out the form and hit generate to see your polished
+                    email!
                   </p>
                 </div>
                 {!note.trim() && (
-                  <div className={`${themeClasses.textMuted} text-sm px-4 py-2 rounded-lg ${themeClasses.buttonSecondary}`}>
+                  <div
+                    className={`${themeClasses.textMuted} text-sm px-4 py-2 rounded-lg ${themeClasses.buttonSecondary}`}
+                  >
                     💡 Write some notes to get started
                   </div>
                 )}
               </div>
             )}
           </div>
-        </div>
 
-        {/* History */}
-        {history.length > 0 && (
-          <div className="xl:col-span-1">
-            <div className={`${themeClasses.cardBg} rounded-xl p-8 border ${themeClasses.cardBorder} shadow-lg transition-all duration-300 hover:shadow-xl`}>
+          {/* History */}
+          {history.length > 0 && (
+            <div
+              className={`${themeClasses.cardBg} rounded-xl p-8 border ${themeClasses.cardBorder} shadow-lg transition-all duration-300 hover:shadow-xl`}
+            >
               <div className="flex items-center gap-3 mb-6">
                 <span className="text-2xl">🕒</span>
                 <h3 className="text-xl font-bold">Recent emails</h3>
               </div>
-              <div className="space-y-4 max-h-96 overflow-y-auto">
+              <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
                 {history.map((item) => (
                   <div
                     key={item.id}
@@ -280,12 +314,16 @@ export default function EmailDrafter() {
                       <span className={`text-xs ${themeClasses.textMuted}`}>
                         {item.timestamp}
                       </span>
-                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${themeClasses.buttonSecondary}`}>
+                      <span
+                        className={`text-xs px-3 py-1 rounded-full font-medium ${themeClasses.buttonSecondary}`}
+                      >
                         {item.tone}
                       </span>
                     </div>
                     <p className="text-sm font-medium mb-2 line-clamp-2">
-                      {item.note.length > 80 ? `${item.note.substring(0, 80)}...` : item.note}
+                      {item.note.length > 80
+                        ? `${item.note.substring(0, 80)}...`
+                        : item.note}
                     </p>
                     {item.recipient && (
                       <p className={`text-xs ${themeClasses.textMuted}`}>
@@ -296,8 +334,8 @@ export default function EmailDrafter() {
                 ))}
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
